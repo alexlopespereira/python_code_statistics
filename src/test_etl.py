@@ -12,7 +12,3 @@ kf.upload_files_replacing_index_id()
 #
 # run_etl_job(config, config.INDEXES[0])
 # run_etl_job(config, config.INDEXES[1])
-
-# run_all_etls(INDEXES)
-
-# replace_id_upload_files()
