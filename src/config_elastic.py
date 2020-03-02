@@ -3,6 +3,7 @@ import os
 from collections import defaultdict
 
 from elasticsearch import Elasticsearch
+from settings.settings_source_code import body_settings_sourcecode
 from settings_generic import body_settings_generic
 
 config = defaultdict()
@@ -13,9 +14,7 @@ config['ES_USER'] = os.environ.get('ES_USER') or 'admin'
 config['ES_PASSWORD'] = os.environ.get('ES_PASSWORD') or 'pass'
 config['ES_USE_SSL'] = os.environ.get('ES_USE_SSL') == "True"
 config['ES_SOURCECODE_INDEX'] = os.environ.get('ES_SOURCECODE_INDEX') or 'sourcecode'
-config['DEST_KIBANA_URL'] = os.environ.get('DEST_KIBANA_URL') or 'localhost:5601'
-
-ES_INDEX2 = os.environ.get('ES_INDEX2') or 'index2'
+config['ES_TAGCLOUD_INDEX'] = os.environ.get('ES_TAGCLOUD_INDEX') or 'tagcloud'
 
 if config['ES_USE_SSL']:
     config['ES_URL'] = "https://{0}:{1}".format(config['ES_HOST'], config['ES_PORT'])
@@ -23,13 +22,7 @@ else:
     config['ES_URL'] = "http://{0}:{1}".format(config['ES_HOST'], config['ES_PORT'])
 
 
-job_soucecode = {"index-pattern": config['ES_SOURCECODE_INDEX'], "settings": body_settings_generic, "prefix": "SOURCECODE__",
-                 "namespace": "sourcecode", "date_field": "date", "description": "Source Code", "module_name": "ElkEtlPythonCode",
-                 "class_name": "ElkEtlPythonCode", "kibana_date_format": "yyyy-MM-dd HH:mm:ss",
-                 "src_path": "../data"}
-
 config['INDEXES'] = defaultdict()
-config['INDEXES']['job_soucecode'] = job_soucecode
 
 
 es = Elasticsearch(
@@ -41,3 +34,15 @@ es = Elasticsearch(
 
 config['es'] = es
 
+job_sourcecode = {"index-pattern": config['ES_SOURCECODE_INDEX'], "settings": body_settings_sourcecode, "prefix": "SOURCECODE__",
+                 "namespace": "default", "date_field": "date_modified", "description": "Source Code", "module_name": "ElkEtlPythonCode",
+                 "class_name": "ElkEtlPythonCode", "kibana_date_format": "yyyy-MM-dd HH:mm:ss",
+                 "src_path": "../data"}
+
+job_tagcloud = {"index-pattern": config['ES_TAGCLOUD_INDEX'], "settings": body_settings_generic, "prefix": "TAGCLOUD__",
+                 "namespace": "default", "description": "Tag Cloud", "module_name": "ElkEtlTagCloud",
+                 "class_name": "ElkEtlTagCloud", "kibana_date_format": "yyyy-MM-dd HH:mm:ss",
+                 "es": es}
+
+config['INDEXES']['job_sourcecode'] = job_sourcecode
+config['INDEXES']['job_tagcloud'] = job_tagcloud

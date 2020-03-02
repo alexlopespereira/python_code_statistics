@@ -1,4 +1,8 @@
-import glob
+import datetime
+from pathlib import Path
+import os
+import re
+
 from ElkEtlBase import ElkEtlBase
 
 
@@ -7,12 +11,25 @@ class ElkEtlPythonCode(ElkEtlBase):
     def __init__(self, job_description, limit=1000):
         super().__init__(job_description, limit=limit)
         self.src_path = job_description['src_path']
+        # file_path_wildcard = '{0}/**/*.{1}'.format(self.src_path, "py")
+        self.all_filenames = [i for i in Path(self.src_path).rglob('*.py')]
+        self.limit = 50
+        # self.chunk_size = 1
 
     def load_results(self):
-        file_path_wildcard = '{0}/*.{1}'.format(self.src_path, "py")
-        all_filenames = [i for i in glob.glob(file_path_wildcard)]
+        if self.offset > 500:
+            return None
+
         datalist = []
-        for f in all_filenames:
-            with open(f, 'rb') as file:
+        curr_limit = min(self.offset+self.limit, len(self.all_filenames))
+        for f in self.all_filenames[self.offset:curr_limit]:
+            with open(f, 'r') as file:
                 string = file.read()
-                datalist.append(string)
+                string = re.sub(r"#.*\n", r" ", string)
+                string = string.replace("\n", " ").replace("\\", "")
+                string = re.sub(r'([\'"])((?:(?!\1).)*)\1', " ", string, flags=re.MULTILINE)
+                date_modified = datetime.datetime.fromtimestamp(os.path.getmtime(f)).strftime("%Y-%m-%d %H:%M:%S")
+
+                datalist.append({"sourcecode": string, "filename": os.path.basename(f), "path": os.path.abspath(f), "date_modified": date_modified})
+
+        return datalist
