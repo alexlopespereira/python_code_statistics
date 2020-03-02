@@ -1,7 +1,7 @@
-from run_etl_jobs import *
+# from run_etl_jobs import *
 from config import Config
-from kibanafunctions import KibanaFunctions
-
+# from kibanafunctions import KibanaFunctions
+from etlelk import KibanaFunctions
 
 config = Config()
 kf = KibanaFunctions(config)

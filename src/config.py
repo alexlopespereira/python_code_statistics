@@ -1,10 +1,11 @@
 import os
 from collections import defaultdict
 from elasticsearch import Elasticsearch
-from settings_generic import body_settings_generic
+from etlelk.configbase import ConfigBase
+from etlelk.settings_generic import body_settings_generic
 from settings.settings_source_code import body_settings_sourcecode
 
-class Config:
+class Config(ConfigBase):
     DEST_PATH = os.environ.get('DEST_PATH') or "../saved_objects"
     KIBANA_HOST = os.environ.get('KIBANA_HOST') or 'localhost'
     KIBANA_PORT = os.environ.get('KIBANA_PORT') or '5601'

@@ -1,8 +1,7 @@
-# from elketlbase import ElkEtlBase
-# from elketlbase import ElkEtlBase
+from etlelk.etlbase import EtlBase
 
 
-class EtlTagCloud(ElkEtlBase):
+class EtlTagCloud(EtlBase):
 
     def __init__(self, config, job_description, limit=1000):
         super().__init__(config, job_description, limit=limit)
