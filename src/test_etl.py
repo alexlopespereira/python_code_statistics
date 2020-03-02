@@ -1,14 +1,17 @@
-from config_elastic import config
-from deploy_kibana import replace_id_upload_files
-from elasticsearch_functions import delete_index
 from run_etl_jobs import *
+from config import Config
+from kibanafunctions import KibanaFunctions
 
 
-delete_index(config['es'], config['INDEXES']['job_sourcecode']['index-pattern'])
-delete_index(config['es'], config['INDEXES']['job_tagcloud']['index-pattern'])
-
-run_etl_job(config['INDEXES']['job_sourcecode'])
-run_etl_job(config['INDEXES']['job_tagcloud'])
+config = Config()
+kf = KibanaFunctions(config)
+# kf.download_all()
+kf.upload_files_replacing_index_id()
+# kf.els.delete_index(config.es, config.INDEXES[0]['index'])
+# kf.els.delete_index(config.es, config.INDEXES[1]['index'])
+#
+# run_etl_job(config, config.INDEXES[0])
+# run_etl_job(config, config.INDEXES[1])
 
 # run_all_etls(INDEXES)
 

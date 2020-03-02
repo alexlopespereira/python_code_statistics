@@ -3,13 +3,13 @@ from pathlib import Path
 import os
 import re
 
-from ElkEtlBase import ElkEtlBase
+from elketlbase import ElkEtlBase
 
 
-class ElkEtlPythonCode(ElkEtlBase):
+class EtlPythonCode(ElkEtlBase):
 
-    def __init__(self, job_description, limit=1000):
-        super().__init__(job_description, limit=limit)
+    def __init__(self, config, job_description, limit=1000):
+        super().__init__(config, job_description, limit=limit)
         self.src_path = job_description['src_path']
         # file_path_wildcard = '{0}/**/*.{1}'.format(self.src_path, "py")
         self.all_filenames = [i for i in Path(self.src_path).rglob('*.py')]

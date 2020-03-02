@@ -1,12 +1,12 @@
-from ElkEtlBase import ElkEtlBase
+from elketlbase import ElkEtlBase
 
 
-class ElkEtlTagCloud(ElkEtlBase):
+class EtlTagCloud(ElkEtlBase):
 
-    def __init__(self, job_description, limit=1000):
-        super().__init__(job_description, limit=limit)
+    def __init__(self, config, job_description, limit=1000):
+        super().__init__(config, job_description, limit=limit)
         self.es = job_description['es']
-        self.src_index = "sourcecode"
+        self.src_index = "sourcecode__sourcecode"
         self.loaded = False
 
     def load_results(self):
