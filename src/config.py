@@ -5,6 +5,7 @@ from etlelk.configbase import ConfigBase
 from etlelk.settings_generic import body_settings_generic
 from settings.settings_source_code import body_settings_sourcecode
 
+
 class Config(ConfigBase):
     DEST_PATH = os.environ.get('DEST_PATH') or "../saved_objects"
     KIBANA_HOST = os.environ.get('KIBANA_HOST') or 'localhost'

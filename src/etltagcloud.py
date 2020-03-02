@@ -12,12 +12,32 @@ class EtlTagCloud(EtlBase):
     def load_results(self):
         if self.loaded:
             return None
+        query = """{
+            "stored_fields": []
+        }"""
+        res = self.es.search(index=self.src_index, body=query)
+        query_list = []
+        for r in res['hits']['hits']:
+            query_list.append(r['_id'])
+
+        res2 = self.es.mtermvectors(index=self.src_index, ids=query_list, fields=["sourcecode"], payloads=False, positions=False)
+        data_list = []
+        for k, v in res2['docs'][0]['term_vectors']['sourcecode']['terms'].items():
+            data_list.append({"term": k, "freq": v['term_freq']})
+
+        self.loaded = True
+        return data_list
+
+
+    def load_results_bkp(self):
+        if self.loaded:
+            return None
 
         query = """{
             "size": 0,
             "aggregations" : {
                 "tagcloud" : {
-                    "terms" : { "field" : "sourcecode", "size" : 100  }
+                    "terms" : { "field" : "sourcecode", "size" : 1000  }
                 }
             }
         }"""
