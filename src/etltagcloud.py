@@ -34,7 +34,7 @@ class EtlTagCloud(EtlBase):
         query = """{"size": 10000, "stored_fields": []}"""
         res = self.es.search(index=self.src_index, body=query)
         docs = {}
-        for l in list(self.split(res['hits']['hits'], 4)):
+        for l in list(self.split(res['hits']['hits'], 10)):
             query_list = []
             for r in l:
                 query_list.append(r['_id'])
@@ -55,7 +55,7 @@ class EtlTagCloud(EtlBase):
             "size": 0,
             "aggregations" : {
                 "tagcloud" : {
-                    "terms" : { "field" : "sourcecode", "size" : 10000  }
+                    "terms" : { "field" : "sourcecode", "size" : 5000  }
                 }
             }
         }"""

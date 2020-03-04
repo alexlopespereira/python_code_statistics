@@ -42,7 +42,7 @@ class Config(ConfigBase):
     job_sourcecode = {"index": ES_SOURCECODE_INDEX, "settings": body_settings_sourcecode, "prefix": "sourcecode__",
                      "date_field": "date_modified", "description": "Source Code", "module_name": "etlpythoncode",
                      "class_name": "EtlPythonCode", "kibana_date_format": "yyyy-MM-dd HH:mm:ss",
-                     "src_path": "../data"}
+                     "src_path": "../data/kaggle"}
     
     job_tagcloud = {"index": ES_TAGCLOUD_INDEX, "settings": body_settings_generic, "prefix": "tagcloud__",
                      "description": "Tag Cloud", "module_name": "etltagcloud",
