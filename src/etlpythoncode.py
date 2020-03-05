@@ -15,8 +15,8 @@ class EtlPythonCode(EtlBase):
         self.limit = 50
 
     def load_results(self):
-        if self.offset > 500:
-            return None
+        # if self.offset > 500:
+        #     return None
 
         datalist = []
         curr_limit = min(self.offset+self.limit, len(self.all_filenames))
